@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "frontend/**" # Only trigger if frontend files changed
-      - ".github/workflows/frontend-deploy.yml"
+      - ".github/workflows/frontend-production-deploy.yml"
 
 env:
   APP_NAME: frontend
