@@ -1,0 +1,74 @@
+name: Frontend Production Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "frontend/**" # Only trigger if frontend files changed
+      - ".github/workflows/frontend-deploy.yml"
+
+env:
+  APP_NAME: frontend
+  IMAGE_TYPE: api-nest
+  IMAGE_TAG: ${{ github.sha }}
+  REGISTRY: docker.io
+  WEBHOOK_URL: ${{ secrets.REDEPLOY_WEBHOOK }}
+  NEXT_PUBLIC_API_URL: ${{ vars.API_URL }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          pnpm install
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          pnpm run build
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-latest
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-buildcache,mode=max
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
+
+      - name: Trigger Re-deployment
+        run: |
+          curl -X POST "${{ env.WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{"service": "${{ env.APP_NAME }}", "action": "redeploy"}' \
+            --fail --silent --show-error
