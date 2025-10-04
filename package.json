@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --parallel --filter frontend dev",
-    "build": "pnpm run build --filter=frontend",
+    "start": "pnpm --parallel --filter frontend start",
+    "build": "pnpm --filter=frontend build",
     "lint-staged": "pnpm --filter frontend lint-staged",
     "prepare": "husky install"
   },
