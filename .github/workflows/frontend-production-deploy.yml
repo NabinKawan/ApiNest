@@ -1,4 +1,4 @@
-name: Frontend Production Deploy
+name: Frontend Deploy (Production)
 
 on:
   push:
@@ -35,11 +35,11 @@ jobs:
         with:
           node-version: "20"
           cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
 
       - name: Install frontend dependencies
         run: |
-          cd frontend
-          pnpm install
+          pnpm install --filter frontend
 
       - name: Build frontend
         run: |

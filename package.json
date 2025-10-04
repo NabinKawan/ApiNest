@@ -1,5 +1,10 @@
 {
+  "name": "api-nest-monorepo",
+  "private": true,
   "scripts": {
+    "dev": "pnpm --parallel --filter frontend dev",
+    "build": "pnpm run build --filter=frontend",
+    "lint-staged": "pnpm --filter frontend lint-staged",
     "prepare": "husky install"
   },
   "devDependencies": {
