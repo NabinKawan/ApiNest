@@ -1,4 +1,6 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
-pnpm --filter frontend lint-staged
+# Run lint-staged for both frontend and backend
+cd frontend && pnpm lint-staged
+cd ../backend && pnpm lint-staged
