@@ -10,7 +10,7 @@ on:
 
 env:
   APP_NAME: frontend
-  IMAGE_TYPE: api-nest
+  IMAGE_TYPE: apinest
   IMAGE_TAG: ${{ github.sha }}
   REGISTRY: docker.io
   WEBHOOK_URL: ${{ secrets.REDEPLOY_WEBHOOK }}
