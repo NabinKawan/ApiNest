@@ -20,11 +20,12 @@
   },
   "lint-staged": {
     "*.go": [
-      "golangci-lint fmt",
-      "golangci-lint run --fix"
+      "gofmt -w",
+      "goimports -w",
+      "bash -c 'golangci-lint run --fix --new-from-rev=HEAD~1 || golangci-lint run --fix'"
     ],
     "go.mod": [
-      "go mod tidy"
+      "bash -c 'go mod tidy'"
     ]
   }
 }

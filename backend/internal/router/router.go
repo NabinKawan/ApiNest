@@ -1,6 +1,9 @@
 package router
 
 import (
+	"apinest/api/handler"
+	"apinest/api/repository"
+	"apinest/api/service"
 	"apinest/internal/config"
 	"context"
 	"net/http"
@@ -37,6 +40,16 @@ func New(ctx context.Context) *gin.Engine {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+
+	v1 := g.Group(V1)
+
+	{
+		wr := repository.NewWaitingListRepository()
+		ws := service.NewWaitingListService(wr)
+		wh := handler.NewWaitingListHandler(ws)
+
+		v1.POST("/waiting-list", wh.CreateWaitingList)
+	}
 
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
