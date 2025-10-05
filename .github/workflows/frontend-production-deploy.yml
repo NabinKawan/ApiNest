@@ -7,6 +7,8 @@ on:
     paths:
       - "frontend/**" # Only trigger if frontend files changed
       - ".github/workflows/frontend-production-deploy.yml"
+      - "package.json"
+      - "pnpm-lock.yaml"
 
 env:
   APP_NAME: apinest
