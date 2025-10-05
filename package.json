@@ -6,12 +6,12 @@
     "dev": "pnpm --parallel --filter frontend dev",
     "start": "pnpm --parallel --filter frontend start",
     "build": "pnpm --filter=frontend --filter=backend build",
-    "lint-staged": "pnpm --filter frontend lint-staged",
     "lint": "pnpm --filter=frontend --filter=backend lint",
     "prepare": "husky install",
     "postinstall": "cd backend && go mod tidy"
   },
   "devDependencies": {
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "lint-staged": "^13.2.3"
   }
 }

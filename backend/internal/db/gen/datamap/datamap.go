@@ -15,6 +15,9 @@ type DataMapEntry struct {
 // GetDataMapEntries returns all the type mappings for PostgreSQL to Go types
 func GetDataMapEntries() []DataMapEntry {
 	return []DataMapEntry{{
+		GoType:       "enum.WaitingStatus",
+		PostgresType: "waiting_status",
+	}, {
 		GoType:       "pq.StringArray",
 		PostgresType: "text[]",
 	}, {

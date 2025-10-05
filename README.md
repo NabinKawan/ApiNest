@@ -5,17 +5,19 @@
 [![Go](https://img.shields.io/badge/Go-1.24-blue.svg?logo=go&logoColor=white)](https://go.dev/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-green.svg?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-ApiNest is an open-source platform that allows users to create secure JSON buckets, each accessible via simple, human-readable API endpoints. Perfect for lightweight data storage, prototyping APIs, or managing configuration files without the overhead of a full database.
+ApiNest is an open-source platform that transforms your JSON data into instant REST APIs. Simply upload your JSON data and get fully functional endpoints with automatic CRUD operations, documentation, and zero configuration. Perfect for rapid prototyping, lightweight data storage, or creating APIs from existing JSON files without the overhead of a full database setup.
 
 ## ✨ Features
 
-- **JSON Buckets**: Store and retrieve JSON data via intuitive RESTful endpoints.
-- **Simple Endpoints**: Each bucket gets a dedicated, shareable URL in the format `https://apinest.kawannabin.com.np/{username}/{bucket}` (e.g., `https://apinest.kawannabin.com.np/nabin/projects`).
-- **User-Namespaced Paths**: Buckets are organized under usernames for easy collaboration and access control.
-- **Authentication**: Built-in API key or session-based auth for secure access.
-- **Dashboard**: Intuitive web interface built with Next.js for managing buckets and users.
-- **Scalable Backend**: Go-based API server with PostgreSQL for reliable persistence.
-- **Monorepo Setup**: Single repository for frontend and backend, with easy local development.
+- **JSON to API**: Upload your JSON data and instantly get REST endpoints with full CRUD operations
+- **Zero Configuration**: No setup required - just paste your JSON and start using the API
+- **Auto Documentation**: Beautiful Swagger-style API docs generated automatically
+- **Custom Endpoints**: Get unique URLs like `/api/users` and `/api/products` automatically generated from your data
+- **User-Namespaced Paths**: Buckets are organized under usernames for easy collaboration and access control
+- **Authentication**: Built-in API key or session-based auth for secure access
+- **Interactive Dashboard**: Intuitive web interface built with Next.js for managing your JSON buckets
+- **Scalable Backend**: Go-based API server with PostgreSQL for reliable persistence
+- **Monorepo Setup**: Single repository for frontend and backend, with easy local development
 
 ## 🚀 Website
 
@@ -38,6 +40,59 @@ Visit the ApiNest website: [https://apinest.kawannabin.com.np](https://apinest.k
 ## 🛠️ Quick Start
 
 ApiNest is a monorepo using pnpm workspaces. Ensure you have [Node.js](https://nodejs.org/) (v18+), [pnpm](https://pnpm.io/) (v8+), [Go](https://go.dev/) (v1.21+), and [PostgreSQL](https://www.postgresql.org/) installed. Use Docker for easy database setup (optional but recommended).
+
+## 🔧 Development Setup
+
+### Migration tool & Swagger Setup
+
+- Install goose from here: [Goose](https://block.github.io/goose/docs/getting-started/installation/)
+- Install swaggo from here: [Swaggo](https://github.com/swaggo/swag)
+
+### Linting & Pre-commit Setup
+
+To ensure code quality and consistency, set up linting and pre-commit hooks:
+
+1. **Install pre-commit**:
+
+   ```bash
+   pip install pre-commit
+   ```
+
+2. **Install Go linting tools**:
+
+   ```bash
+   # Install golangci-lint
+   curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.4.0
+
+   # Install goimports for Go code formatting
+   go install golang.org/x/tools/cmd/goimports@latest
+   ```
+
+3. **Set up pre-commit hooks**:
+
+   ```bash
+   pre-commit install
+   ```
+
+4. **Run linting manually** (if needed):
+
+   ```bash
+   # Frontend linting
+   pnpm --filter=frontend lint
+
+   # Backend linting
+   cd backend && pnpm lint
+   ```
+
+The pre-commit hooks will automatically run linting and formatting checks before each commit, ensuring code quality and consistency across the project.
+
+### Development Workflow
+
+1. **Make changes** to your code
+2. **Stage your changes**: `git add .`
+3. **Commit**: `git commit -m "your message"` - pre-commit hooks will run automatically
+4. **If hooks fail**: Fix the issues and commit again
+5. **Push**: `git push` when all checks pass
 
 ### Prerequisites
 
@@ -75,6 +130,10 @@ ApiNest is a monorepo using pnpm workspaces. Ensure you have [Node.js](https://n
 ```bash
 cd backend
 go mod tidy
+
+# Run migrations
+npm run migration:up
+
 go run main.go
 ```
 
@@ -114,12 +173,23 @@ Access the dashboard at `http://localhost:3000` to sign up, create a bucket unde
 ## 📖 Usage
 
 1. **Sign Up/Login**: Create an account via the dashboard to get your `{username}`.
-2. **Create a Bucket**: Via dashboard or API (`POST /buckets` with `{ "name": "projects" }` payload). It will be accessible at `https://apinest.com/{username}/projects`.
-3. **Access Data**: Use the endpoint for CRUD:
-   - `GET /nabin/projects` – Retrieve JSON data.
-   - `POST /nabin/projects` – Update with new JSON payload.
-   - Include `Authorization: Bearer {api-key}` header for private buckets.
-4. **Share & Collaborate**: Public buckets are readable by anyone; private ones require auth.
+2. **Upload JSON Data**: Paste your JSON data into a new bucket via the dashboard or API. For example:
+   ```json
+   {
+     "users": [
+       { "id": 1, "name": "John Doe", "email": "john@example.com" },
+       { "id": 2, "name": "Jane Smith", "email": "jane@example.com" }
+     ]
+   }
+   ```
+3. **Get Instant API**: Your JSON data becomes a fully functional REST API:
+   - `GET /{username}/users` – Retrieve all users
+   - `GET /{username}/users/1` – Get specific user
+   - `POST /{username}/users` – Add new user
+   - `PUT /{username}/users/1` – Update user
+   - `DELETE /{username}/users/1` – Delete user
+4. **Auto Documentation**: Visit the generated Swagger docs to test your endpoints
+5. **Share & Collaborate**: Public buckets are readable by anyone; private ones require auth
 
 ## 📄 License
 

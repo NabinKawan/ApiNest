@@ -4,9 +4,28 @@
     "dev": "go run cmd/server/main.go",
     "build": "go build -o server cmd/server/main.go",
     "gen:types": "go run cmd/types/generate.go",
+    "lint-staged": "lint-staged",
     "gen:model": "go run cmd/model/generate.go",
     "gen:all": "npm run gen:types && npm run gen:model",
     "lint": "golangci-lint run --fix",
-    "swag": "swag init -g ./cmd/server/main.go"
+    "swag": "swag init -g ./cmd/server/main.go",
+    "migration:up": "goose up --allow-missing",
+    "migration:down": "goose down",
+    "migration:create": "sh -c 'if [ -z \"$1\" ]; then echo \"Usage: npm run migration:create /internal/db/migrations/<name>\"; exit 1; fi && goose create \"$1\" sql' --"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.go": [
+      "gofmt -w",
+      "goimports -w",
+      "bash -c 'golangci-lint run --fix --new-from-rev=HEAD~1 || golangci-lint run --fix'"
+    ],
+    "go.mod": [
+      "bash -c 'go mod tidy'"
+    ]
   }
 }
