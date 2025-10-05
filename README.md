@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black.svg?logo=next.js&logoColor=white)](https://nextjs.org/)
-[![Go](https://img.shields.io/badge/Go-1.21-blue.svg?logo=go&logoColor=white)](https://go.dev/)
+[![Go](https://img.shields.io/badge/Go-1.24-blue.svg?logo=go&logoColor=white)](https://go.dev/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-green.svg?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
 ApiNest is an open-source platform that allows users to create secure JSON buckets, each accessible via simple, human-readable API endpoints. Perfect for lightweight data storage, prototyping APIs, or managing configuration files without the overhead of a full database.
@@ -10,7 +10,7 @@ ApiNest is an open-source platform that allows users to create secure JSON bucke
 ## ✨ Features
 
 - **JSON Buckets**: Store and retrieve JSON data via intuitive RESTful endpoints.
-- **Simple Endpoints**: Each bucket gets a dedicated, shareable URL in the format `https://apinest.com/{username}/{bucket}` (e.g., `https://apinest.com/nabin/projects`).
+- **Simple Endpoints**: Each bucket gets a dedicated, shareable URL in the format `https://apinest.kawannabin.com.np/{username}/{bucket}` (e.g., `https://apinest.kawannabin.com.np/nabin/projects`).
 - **User-Namespaced Paths**: Buckets are organized under usernames for easy collaboration and access control.
 - **Authentication**: Built-in API key or session-based auth for secure access.
 - **Dashboard**: Intuitive web interface built with Next.js for managing buckets and users.

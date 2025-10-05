@@ -1,0 +1,14 @@
+# Binaries
+/bin/
+/build/
+/out/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+.env
+
+docs
+server

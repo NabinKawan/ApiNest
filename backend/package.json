@@ -1,6 +1,12 @@
 {
   "name": "backend",
   "scripts": {
-    "dev": "go run main.go"
+    "dev": "go run cmd/server/main.go",
+    "build": "go build -o server cmd/server/main.go",
+    "gen:types": "go run cmd/types/generate.go",
+    "gen:model": "go run cmd/model/generate.go",
+    "gen:all": "npm run gen:types && npm run gen:model",
+    "lint": "golangci-lint run --fix",
+    "swag": "swag init -g ./cmd/server/main.go"
   }
 }
