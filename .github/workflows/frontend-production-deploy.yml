@@ -9,10 +9,10 @@ on:
       - ".github/workflows/frontend-production-deploy.yml"
 
 env:
-  APP_NAME: frontend
-  IMAGE_TYPE: apinest
+  APP_NAME: apinest
+  IMAGE_TYPE: frontend
   IMAGE_TAG: ${{ github.sha }}
-  REGISTRY: docker.io
+  REGISTRY: ${{ vars.REGISTRY }}
   WEBHOOK_URL: ${{ secrets.REDEPLOY_WEBHOOK }}
   NEXT_PUBLIC_API_URL: ${{ vars.API_URL }}
 
@@ -62,7 +62,7 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            ${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-${{ env.IMAGE_TAG }}
+            ${{ env.REGISTRY }}/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-${{ env.IMAGE_TAG }}
             ${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-latest
           cache-from: type=registry,ref=${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-buildcache
           cache-to: type=registry,ref=${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-buildcache,mode=max

@@ -123,7 +123,7 @@ Access the dashboard at `http://localhost:3000` to sign up, create a bucket unde
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
 
 ## 🙏 Acknowledgments
 
