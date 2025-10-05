@@ -51,6 +51,7 @@ const config = {
                     700: '#c2410c', // Dark orange
                     800: '#9a3412', // Very dark orange
                     900: '#7c2d12', // Darkest orange
+                    DEFAULT: '#f97316',
                 },
                 // Secondary color palette - Pink/Purple theme
                 secondary: {
