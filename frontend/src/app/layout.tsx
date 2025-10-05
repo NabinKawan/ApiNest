@@ -1,13 +1,23 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Nunito, Fredoka } from 'next/font/google';
 import './global.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const nunito = Nunito({
+    subsets: ['latin'],
+    variable: '--font-nunito',
+    weight: ['400', '500', '600', '700', '800', '900'],
+});
+
+const fredoka = Fredoka({
+    subsets: ['latin'],
+    variable: '--font-fredoka',
+    weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
-    title: 'ApiNest - Create JSON Buckets as Easy APIs',
+    title: 'ApiNest - Transform JSON into REST APIs Instantly',
     description:
-        'Cartoon-simple APIs for developers. Paste JSON, get endpoints.',
+        'Upload your JSON data and get instant REST endpoints with full CRUD operations, automatic documentation, and zero configuration.',
 };
 
 export default function RootLayout({
@@ -17,7 +27,11 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body className={inter.className}>{children}</body>
+            <body
+                className={`${nunito.variable} ${fredoka.variable} font-nunito`}
+            >
+                {children}
+            </body>
         </html>
     );
 }

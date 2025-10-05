@@ -17,7 +17,7 @@ export default function Button({
     onClick,
 }: ButtonProps) {
     const baseClasses =
-        'font-black text-white shadow-[4px_4px_0px_#000000] transition-all rounded-3xl px-6 py-3';
+        'font-black text-white shadow-cartoon transition-all rounded-4xl px-6 py-3';
     const variants = {
         primary:
             'bg-gradient-to-r from-orange-500 via-pink-500 to-yellow-500 hover:-translate-y-1 hover:rotate-1',
