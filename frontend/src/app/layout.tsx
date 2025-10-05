@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Nunito, Fredoka } from 'next/font/google';
 import './global.css';
+import Providers from '@/providers';
+import Toast from '@/components/ui/toast';
 
 const nunito = Nunito({
     subsets: ['latin'],
@@ -30,7 +32,8 @@ export default function RootLayout({
             <body
                 className={`${nunito.variable} ${fredoka.variable} font-nunito`}
             >
-                {children}
+                <Providers>{children}</Providers>
+                <Toast />
             </body>
         </html>
     );

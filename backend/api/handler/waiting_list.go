@@ -3,6 +3,8 @@ package handler
 import (
 	"apinest/api/dto"
 	"apinest/api/service"
+	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +32,12 @@ func (h *WaitingListHandler) CreateWaitingList(c *gin.Context) {
 
 	err := h.service.AddToWaitingList(c.Request.Context(), req.Email)
 	if err != nil {
+		if strings.Contains(err.Error(), "duplicate key value") ||
+			strings.Contains(err.Error(), "unique constraint") {
+			c.JSON(http.StatusConflict, gin.H{"error": "email already exist"})
+			return
+		}
+
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
