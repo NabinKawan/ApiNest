@@ -11,11 +11,11 @@ export default function RequestAccessCTA() {
         >
             <div className="absolute -top-10 left-1/2 h-20 w-20 -translate-x-1/2 transform animate-bounce rounded-full bg-yellow-300 shadow-[4px_4px_0px_#000000]"></div>
             <h3 className="mb-8 text-4xl font-black text-gray-900">
-                Ready to Cartoonize Your APIs? 🎨
+                Ready to Build APIs the Easy Way? 🚀
             </h3>
             <p className="mb-10 text-xl font-medium text-gray-700">
-                Join the fun early. Request access and spin up your first JSON
-                bucket today. Let&aposs make APIs dance! 💃
+                Say goodbye to boilerplate! With ApiNest, turn your JSON into
+                ready-to-use APIs in seconds.
             </p>
             <form
                 className="flex flex-col items-center justify-center gap-6 md:flex-row"
@@ -26,7 +26,7 @@ export default function RequestAccessCTA() {
                     type="submit"
                     className="hover:-translate-y-2 hover:rotate-2 hover:scale-105"
                 >
-                    Request Access 🚀
+                    Join Waitlist ✨
                 </Button>
             </form>
         </section>

@@ -36,7 +36,7 @@ export default function LandingPage() {
                     href="#request"
                     className="mt-12 px-10 py-5 text-xl hover:-translate-y-2 hover:rotate-3 hover:scale-105"
                 >
-                    🚀 Request Access Now!
+                    🚀 Join Waitlist Now!
                 </Button>
             </section>
 

@@ -53,7 +53,7 @@ export default function Features() {
     return (
         <section id="features" className="relative z-10 mt-32 px-6 md:px-20">
             <h3 className="mb-16 text-center text-4xl font-black text-gray-900">
-                Why NestAPI? 🤔
+                Why ApiNest? 🤔
             </h3>
             <div className="grid gap-12 md:grid-cols-3">
                 {features.map(({ icon, title, description }, index) => (
