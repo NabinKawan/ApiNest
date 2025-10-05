@@ -2,7 +2,6 @@ package config
 
 import (
 	"os"
-	"strconv"
 
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
@@ -47,17 +46,3 @@ func getEnv(key, fallback string) string {
 	return fallback
 }
 
-func getEnvAsInt(key string, fallback int) int {
-	valueStr := getEnv(key, "")
-	if valueStr == "" {
-		return fallback
-	}
-
-	value, err := strconv.Atoi(valueStr)
-	if err != nil {
-		logrus.Warnf("Warning: Could not parse %s as integer. Using fallback %d.", key, fallback)
-		return fallback
-	}
-
-	return value
-}
