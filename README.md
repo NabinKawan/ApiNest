@@ -28,7 +28,12 @@ Visit the ApiNest website: [https://apinest.kawannabin.com.np](https://apinest.k
 ```
 .
 ├── frontend/              # Next.js app (landing page + dashboard)
+│   ├── Dockerfile         # Frontend Docker configuration
+│   └── ...
 ├── backend/               # Go backend with PostgreSQL integration
+│   ├── Dockerfile         # Backend Docker configuration
+│   └── ...
+├── docker-compose.yml     # Docker Compose configuration for full stack
 ├── package.json           # Monorepo configuration and scripts
 ├── pnpm-lock.yaml         # pnpm lockfile for dependencies
 ├── pnpm-workspace.yaml    # pnpm workspace definition
@@ -39,9 +44,70 @@ Visit the ApiNest website: [https://apinest.kawannabin.com.np](https://apinest.k
 
 ## 🛠️ Quick Start
 
-ApiNest is a monorepo using pnpm workspaces. Ensure you have [Node.js](https://nodejs.org/) (v18+), [pnpm](https://pnpm.io/) (v8+), [Go](https://go.dev/) (v1.21+), and [PostgreSQL](https://www.postgresql.org/) installed. Use Docker for easy database setup (optional but recommended).
+ApiNest is a monorepo using pnpm workspaces. You can run it either with Docker Compose (recommended) or with local development setup.
+
+### 🐳 Docker Compose (Recommended)
+
+The easiest way to get started is using Docker Compose, which sets up the entire stack including PostgreSQL:
+
+```bash
+# Clone the repository
+git clone https://github.com/nabinkawan/apinest.git
+cd apinest
+
+# Start all services
+docker-compose up --build
+
+# Or run in detached mode
+docker-compose up --build -d
+```
+
+This will start:
+
+- **Frontend**: Next.js app on `http://localhost:3000`
+- **Backend**: Go API server on `http://localhost:8080`
+- **Database**: PostgreSQL on `localhost:5433` (mapped from internal port 5432)
+
+#### Docker Compose Configuration
+
+The `docker-compose.yml` file includes:
+
+- **Health checks** for the database to ensure proper startup ordering
+- **Service dependencies** so the backend waits for the database to be ready
+- **Network isolation** with a custom bridge network
+- **Volume persistence** for PostgreSQL data
+- **Environment variables** for configuration
+
+Key environment variables:
+
+- `NEXT_PUBLIC_API_URL`: Frontend API endpoint (set to `http://backend:8080` for internal communication)
+- `DATABASE_URL`: Backend database connection string
+- `GIN_MODE`: Go backend mode (set to `release` for production)
+
+### 🛠️ Local Development Setup
+
+For local development, ensure you have [Node.js](https://nodejs.org/) (v18+), [pnpm](https://pnpm.io/) (v8+), [Go](https://go.dev/) (v1.21+), and [PostgreSQL](https://www.postgresql.org/) installed.
 
 ## 🔧 Development Setup
+
+### Docker Development
+
+For Docker-based development, you can build individual services:
+
+```bash
+# Build frontend (from project root)
+docker build -f frontend/Dockerfile -t apinest-frontend .
+
+# Build backend (from backend directory)
+cd backend
+docker build -t apinest-backend .
+
+# Or use the monorepo scripts
+pnpm docker:frontend  # Build frontend image
+pnpm docker:backend   # Build backend image
+pnpm docker:up        # Start all services with docker-compose
+pnpm docker:down      # Stop all services
+```
 
 ### Migration tool & Swagger Setup
 
@@ -170,6 +236,39 @@ pnpm build  # Builds frontend
 
 Access the dashboard at `http://localhost:3000` to sign up, create a bucket under your username, and test simple access (e.g., `curl http://localhost:8080/yourusername/my-bucket`).
 
+## 🚀 Deployment
+
+### CI/CD Workflows
+
+The project includes GitHub Actions workflows for automated deployment:
+
+- **Frontend Production Deploy** (`.github/workflows/frontend-production-deploy.yml`):
+
+  - Triggers on changes to `frontend/` directory
+  - Builds and pushes Docker image to registry
+  - Triggers re-deployment via webhook
+
+- **Backend Production Deploy** (`.github/workflows/backend-production-deploy.yml`):
+  - Triggers on changes to `backend/` directory
+  - Runs tests and builds Go application
+  - Builds and pushes Docker image to registry
+  - Triggers re-deployment via webhook
+
+### Required Secrets
+
+Configure these secrets in your GitHub repository:
+
+- `REGISTRY_USERNAME`: Docker registry username
+- `REGISTRY_PASSWORD`: Docker registry password
+- `REDEPLOY_WEBHOOK`: Webhook URL for triggering deployments
+
+### Required Variables
+
+Configure these variables in your GitHub repository:
+
+- `REGISTRY`: Docker registry URL (e.g., `docker.io`)
+- `API_URL`: Production API URL for frontend builds
+
 ## 📖 Usage
 
 1. **Sign Up/Login**: Create an account via the dashboard to get your `{username}`.
@@ -190,6 +289,32 @@ Access the dashboard at `http://localhost:3000` to sign up, create a bucket unde
    - `DELETE /{username}/users/1` – Delete user
 4. **Auto Documentation**: Visit the generated Swagger docs to test your endpoints
 5. **Share & Collaborate**: Public buckets are readable by anyone; private ones require auth
+
+## 🔧 Troubleshooting
+
+### Docker Issues
+
+**Frontend container fails with "Cannot find module 'next'"**:
+
+- This is usually resolved by rebuilding the frontend image
+- Run: `docker-compose build frontend --no-cache`
+
+**Backend can't connect to database**:
+
+- Ensure the database container is healthy: `docker-compose ps`
+- Check database logs: `docker-compose logs db`
+- The backend waits for database health check before starting
+
+**Port conflicts**:
+
+- Frontend: Change port mapping in `docker-compose.yml` (e.g., `"3001:3000"`)
+- Backend: Change port mapping in `docker-compose.yml` (e.g., `"8081:8080"`)
+- Database: Change port mapping in `docker-compose.yml` (e.g., `"5434:5432"`)
+
+**Build context issues**:
+
+- Frontend builds from project root: `docker build -f frontend/Dockerfile -t apinest-frontend .`
+- Backend builds from backend directory: `cd backend && docker build -t apinest-backend .`
 
 ## 📄 License
 

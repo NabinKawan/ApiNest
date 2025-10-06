@@ -53,8 +53,8 @@ func New(ctx context.Context) *gin.Engine {
 
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	g.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "Pong")
+	g.GET("/health", func(c *gin.Context) {
+		c.String(http.StatusOK, "Server is running")
 	})
 
 	return g

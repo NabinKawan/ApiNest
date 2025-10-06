@@ -3,12 +3,20 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "pnpm --parallel --filter frontend dev",
-    "start": "pnpm --parallel --filter frontend start",
-    "build": "pnpm --filter=frontend --filter=backend build",
-    "lint": "pnpm --filter=frontend --filter=backend lint",
+    "dev": "pnpm --filter frontend dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "start": "pnpm --filter frontend start",
+    "build": "pnpm --filter frontend --filter backend build",
+    "build:frontend": "pnpm --filter frontend build",
+    "lint": "pnpm --filter frontend lint",
+    "lint:frontend": "pnpm --filter frontend lint",
     "prepare": "husky install",
-    "postinstall": "cd backend && go mod tidy"
+    "clean": "pnpm --filter frontend clean",
+    "type-check": "pnpm --filter frontend type-check",
+    "docker:frontend": "docker build -f frontend/Dockerfile -t apinest-frontend .",
+    "docker:backend": "docker build -f backend/Dockerfile -t apinest-backend ./backend",
+    "docker:up": "docker-compose up --build",
+    "docker:down": "docker-compose down"
   },
   "devDependencies": {
     "husky": "^9.1.7",
