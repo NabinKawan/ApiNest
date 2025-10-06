@@ -87,7 +87,9 @@ const hasPathParams = (
     variables: { pathParams: Record<string, string> };
 } => {
     if (operation.variables === skipToken) return false;
-    return 'variables' in operation && 'pathParams' in operation.variables;
+    return (
+        'variables' in operation && 'pathParams' in (operation.variables as any)
+    );
 };
 
 const hasBody = (
@@ -96,7 +98,7 @@ const hasBody = (
     variables: { body: Record<string, unknown> };
 } => {
     if (operation.variables === skipToken) return false;
-    return 'variables' in operation && 'body' in operation.variables;
+    return 'variables' in operation && 'body' in (operation.variables as any);
 };
 
 const hasQueryParams = (
@@ -105,5 +107,8 @@ const hasQueryParams = (
     variables: { queryParams: Record<string, unknown> };
 } => {
     if (operation.variables === skipToken) return false;
-    return 'variables' in operation && 'queryParams' in operation.variables;
+    return (
+        'variables' in operation &&
+        'queryParams' in (operation.variables as any)
+    );
 };

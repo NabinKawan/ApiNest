@@ -3,9 +3,6 @@ import {
     generateReactQueryComponents,
 } from '@openapi-codegen/typescript';
 import { defineConfig } from '@openapi-codegen/cli';
-import { config } from 'dotenv';
-
-config();
 
 export default defineConfig({
     api: {
