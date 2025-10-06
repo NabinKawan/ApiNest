@@ -5,45 +5,52 @@ RUN corepack enable
 WORKDIR /app
 
 FROM base AS deps
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY frontend/package.json ./frontend/
+COPY .npmrc ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --filter frontend --frozen-lockfile
 
 FROM base AS builder
-COPY . /app
-COPY --from=deps /app/node_modules ./node_modules
+COPY frontend ./frontend
 
-# Accept build arguments
+COPY --from=deps /app/node_modules ./frontend/node_modules
+
+WORKDIR /app/frontend
 ARG NEXT_PUBLIC_API_URL
-
-# Set environment variables for the build
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
 FROM base AS runner
-ENV NODE_ENV production
+ENV NODE_ENV=production
+WORKDIR /app
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 1001 nodejs \
+  && adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Copy only the standalone build output
+COPY --from=builder /app/frontend/public ./public
+COPY --from=builder /app/frontend/.next/standalone ./
+COPY --from=builder /app/frontend/.next/static ./.next/static
+
+
+# # Copy workspace files for pnpm production install
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
+COPY frontend/package.json ./frontend/
+COPY .npmrc ./
+
+# # Install only production deps for frontend
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --prod --filter frontend... --frozen-lockfile --ignore-scripts
 
 USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
-# set hostname to localhost
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
 CMD ["node", "server.js"]

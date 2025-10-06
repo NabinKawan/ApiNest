@@ -1,10 +1,10 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/sirupsen/logrus"
 )
 
 type Config struct {
@@ -26,12 +26,12 @@ func GetConfig() *Config {
 func LoadConfig() *Config {
 	err := godotenv.Load()
 	if err != nil {
-		logrus.Warn("Failed To Load ENV: ", err)
+		log.Println("No .env file found, using OS environment variables")
 	}
 
 	cfg = &Config{
 		Port:        getEnv("PORT", "8081"),
-		DatabaseURL: getEnv("DATABASE_URL", "postgres://postgres:password@localhost:5432/herotv"),
+		DatabaseURL: getEnv("DATABASE_URL", "postgres://postgres:password@localhost:5432/apinest"),
 		Env:         getEnv("APP_ENV", "development"),
 	}
 
