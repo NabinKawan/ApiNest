@@ -1,22 +1,20 @@
-name: Frontend Deploy (Production)
+name: Backend Deploy (Production)
 
 on:
   push:
     branches:
       - main
     paths:
-      - "frontend/**" # Only trigger if frontend files changed
-      - ".github/workflows/frontend-production-deploy.yml"
-      - "package.json"
-      - "pnpm-lock.yaml"
+      - "backend/**"
+      - ".github/workflows/backend-production-deploy.yml"
 
 env:
   APP_NAME: registry
-  IMAGE_TYPE: apinet-frontend
+  IMAGE_TYPE: apinest-backend
   IMAGE_TAG: ${{ github.sha }}
   REGISTRY: ${{ vars.REGISTRY }}
-  WEBHOOK_URL: ${{ secrets.REDEPLOY_FE_WEBHOOK }}
-  NEXT_PUBLIC_API_URL: ${{ vars.API_URL }}
+  WEBHOOK_URL: ${{ secrets.REDEPLOY_BE_WEBHOOK }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 jobs:
   deploy:
@@ -39,8 +37,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./frontend/Dockerfile
+          context: ./backend
+          file: ./backend/Dockerfile
           push: true
           tags: |
             ${{ env.REGISTRY }}/nabinkawan/${{ env.APP_NAME }}:${{ env.IMAGE_TYPE }}-${{ env.IMAGE_TAG }}
@@ -53,7 +51,7 @@ jobs:
             type=gha,mode=max
           platforms: linux/amd64
           build-args: |
-            NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}
+            DATABASE_URL= ${{ env.DATABASE_URL }}
 
       - name: Trigger Re-deployment
         if: env.WEBHOOK_URL != ''

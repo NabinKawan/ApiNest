@@ -22,12 +22,7 @@ FROM alpine:latest
 ARG DATABASE_URL=postgresql://postgres:password@localhost:5432/apinest
 
 # Set environment variables from build args
-ENV DB_HOST=$DB_HOST
-ENV DB_PORT=$DB_PORT
-ENV DB_USER=$DB_USER
-ENV DB_PASSWORD=$DB_PASSWORD
-ENV DB_NAME=$DB_NAME
-ENV DATABASE_URL=$DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
 
 WORKDIR /app
 

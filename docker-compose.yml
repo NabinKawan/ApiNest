@@ -20,15 +20,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    env_file:
-      - backend/.env
     environment:
-      - DATABASE_URL=postgres://${DB_USER:-user}:${DB_PASSWORD:-password}@${DB_HOST:-db}:${DB_PORT:-5432}/${DB_NAME:-apinest}
-      - DB_HOST=${DB_HOST:-db}
-      - DB_PORT=${DB_PORT:-5432}
-      - DB_USER=${DB_USER:-user}
-      - DB_PASSWORD=${DB_PASSWORD:-password}
-      - DB_NAME=${DB_NAME:-apinest}
+      - DATABASE_URL=postgresql://user:password@db:5432/apinest
     depends_on:
       db:
         condition: service_healthy
